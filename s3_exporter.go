@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -96,7 +97,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	for {
 		resp, err := e.svc.ListObjectsV2(query)
 		if err != nil {
-			log.Errorln(err)
+			log.Errorln(err, fmt.Sprintf("bucket: %s", e.bucket))
 			ch <- prometheus.MustNewConstMetric(
 				s3ListSuccess, prometheus.GaugeValue, 0, e.bucket, e.prefix,
 			)
